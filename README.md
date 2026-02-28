@@ -45,6 +45,11 @@ let result = add(5, 10);
 
 I am following the book chapter by chapter. The implementation may diverge from the book where it makes sense to explore alternative approaches or extend the language.
 
+## Extension
+Features added beyond the original book implementation:
+
+- Full Unicode support — the lexer uses rune instead of byte, enabling identifiers and string literals with non-ASCII characters 
+
 ## Reference
 
 - 📖 [Writing An Interpreter In Go — Thorsten Ball](https://interpreterbook.com/)
