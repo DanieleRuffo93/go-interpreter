@@ -5,6 +5,7 @@ import (
 	"github.com/DanieleRuffo93/go-interpreter/ast"
 	"github.com/DanieleRuffo93/go-interpreter/lexer"
 	"github.com/DanieleRuffo93/go-interpreter/token"
+	"strconv"
 )
 
 const (
@@ -37,6 +38,7 @@ func New(l *lexer.Lexer) *Parser {
 
 	p.prefixParseFns = make(map[token.TokenType]prefixParseFn)
 	p.registerPrefix(token.IDENT, p.parseIdentifier)
+	p.registerPrefix(token.INT, p.parseIntegerLiteral)
 
 	p.NextToken()
 	p.NextToken()
@@ -138,6 +140,21 @@ func (p *Parser) parseExpression(precedence int) ast.Expression {
 	leftExpr := prefix()
 	return leftExpr
 
+}
+
+func (p *Parser) parseIntegerLiteral() ast.Expression {
+	il := &ast.IntegerLiteral{Token: p.curToken}
+
+	value, ok := strconv.ParseInt(p.curToken.Literal, 0, 64)
+	if ok != nil {
+		msg := fmt.Sprintf("could not convert %s to int", p.curToken.Literal)
+		p.errors = append(p.errors, msg)
+		return nil
+	}
+
+	il.Value = value
+
+	return il
 }
 
 func (p *Parser) parseIdentifier() ast.Expression {
